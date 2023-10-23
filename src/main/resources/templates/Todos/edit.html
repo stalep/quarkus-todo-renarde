@@ -1,0 +1,31 @@
+<div class="modalenabled">
+    <!--
+  <form action="/Todos/{todo.id}/edit" method="POST" name="edit" up-target=".container" enctype="multipart/form-data">
+  -->
+  {#form uri:Todos.updateTodo(todo.id) }
+
+    <div class="form-row align-items-center">
+      <div class="col-sm-3 my-1">
+        <label class="sr-only" for="task">Task</label>
+        <input type="text" name="task" class="form-control" id="task" placeholder="Task" required autofocus value="{todo.task}">
+      </div>
+
+      <div class="col-auto my-1">
+        <select class="custom-select"  name="priority">
+            <option disabled value="">Priority</option>
+            {#for prio in priorities}
+                    <option value="{prio}" {#if todo.priority == prio}selected{/if}>{prio}</option>
+            {/for}
+        </select>
+      </div>
+
+      <div class="col-auto my-1">
+          <div class="form-check">
+              <input type="checkbox" value="true" name="done" class="form-check-input" id="done" {#if todo.done}checked{/if}>
+              <label class="form-check-label" for="done">Done</label>
+          </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+{/form}
+ </div>

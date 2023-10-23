@@ -1,0 +1,77 @@
+{#include main.html }
+{#title}Todos{/title}
+
+<form action="/Todos/index" method="GET" name="search" up-target=".container">
+<div class="form-row align-items-center">
+<div class="col-sm-3 my-1">
+    <label class="sr-only" for="filter">Search</label>
+        <input type="text" name="filter" class="form-control" id="filter" placeholder="Search By Title" required {#if filter != null}value="{filter}"{/if}>
+</div>
+
+    <input class="btn btn-primary" value="Search" type="submit">&nbsp;
+        <a class="btn btn-secondary {#if filter == null}disabled{/if}" href="/Todos/index" role="button" up-target=".container">Clear Filter</a>
+</div>
+</form>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Task</th>
+      <th scope="col">Priority</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#for todo in todos}
+    <tr {#if todo.done}class="table-secondary"{/if}>
+      <th scope="row">{todo.id}</th>
+      <td>
+        {#if todo.done}
+          <del>{todo.task}</del> (done {todo.doneDate.since})
+        {#else}
+          {todo.task}
+        {/if}
+      </td>
+      <th>{todo.priority}</th>
+      <td class="fit">
+        <div class="btn-group">
+          {#form uri:Todos.done(todo.id) klass="inline"}
+            {#if todo.done}
+              <button type="submit" class="btn btn-warning btn-sm me-1"><i class="bi-arrow-counterclockwise"></i> Mark Undone</button>
+            {#else}
+              <button type="submit" class="btn btn-success btn-sm me-1"><i class="bi-check"></i> Mark Done</button>
+            {/if}
+          {/form}
+
+          {#form uri:Todos.delete(todo.id) klass="inline"}
+            <button type="submit" class="btn btn-danger btn-sm me-1"><i class="bi-trash"></i> Delete</button>
+          {/form}
+            <a class="btn btn-primary btn-sm" href="/Todos/{todo.id}/edit" role="button" up-modal=".modalenabled">Edit</a>
+        </div>
+      </td>
+    </tr>
+    {/for}
+  </tbody>
+</table>
+  {#form uri:Todos.add()}
+    <div class="form-row align-items-center">
+        <div class="col-auto my-1">
+              <label class="sr-only" for="priority">Priority</label>
+            <select class="custom-select"  name="priority">
+                <option disabled value="">Priority</option>
+                {#for prio in priorities}
+                        <option value="{prio}">{prio}</option>
+                {/for}
+            </select>
+        </div>
+
+        <div class="col-5 my-1">
+            <label class="sr-only" for="task">Task</label>
+            <input type="text" name="task" class="form-control" id="task" placeholder="Task" required autofocus >
+        </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+  {/form}
+
+{/include}
